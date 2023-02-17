@@ -7,6 +7,7 @@
     
     Usage: Place it in a /script/ directory under Prestashop root and launch: "php mass-attachment-upload.php"
     PDF(s) should reside under /script/pdf folder
+    Note: make sure to use 32 character max filenames
 */
 
 include __dir__.'/../config/config.inc.php';
@@ -20,8 +21,8 @@ $db = Db::getInstance();
 $alreadyExistingFiles = array_column($db->executeS('SELECT file_name FROM '._DB_PREFIX_.'attachment'), 'file_name');
 
 foreach ($search_results as $search_result) {
-    $original_path_file = $search_results[0];
-    $name = basename($search_results[0]);
+    $original_path_file = $search_result;
+    $name = basename($search_result);
     
     if (in_array($name, $alreadyExistingFiles)) {
         echo 'Skipping '.$name.' since a file with same name had already been uploaded'."\n";
@@ -32,7 +33,7 @@ foreach ($search_results as $search_result) {
     $attachment = new Attachment();
     $languages = Language::getLanguages();
     foreach ($languages as $language) {
-        $attachment->name[$language['id_lang']] = $name;
+        $attachment->name[$language['id_lang']] = substr($name, 0, 31);
         $attachment->description[$language['id_lang']] = $description;
     }
 
