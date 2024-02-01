@@ -23,7 +23,7 @@ $accountsService = $a->getService(\PrestaShop\Module\PsAccounts\Service\PsAccoun
 if ($accountsService->isAccountLinked()) {
     response(true, 'Connection OK');
 } else {
-    response(true, 'Connection OK');
+    response(false, 'Connection KO');
 }
 
 function response($status, $message)
